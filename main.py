@@ -1,4 +1,4 @@
-''' Файл для запуска бота - анкеты)'''
+''' Файл для запуска бота)'''
 import random
 import asyncio
 import logging
@@ -33,9 +33,9 @@ async def send_joke(user_id, sheduled_time):
 
 
 @router.message(Command("start"))
-async def start_ha(message: types.Message):
+async def start_handler(message: types.Message):
     '''Хэндлер на команду /start '''
-    await message.reply("Приветик? Введите время, в которое хотите получить мем (в формате ЧЧ:MM) ")
+    await message.reply("Приветик. Введите время, в которое хотите получить мем (в формате ЧЧ:MM) ")
 
 
 @router.message()
