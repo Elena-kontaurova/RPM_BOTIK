@@ -23,7 +23,6 @@ async def get_time_notify():
 
 async def sending_messages():
     """Рассылка сообщений"""
-
     GlobalVars.SEND_TIME = await get_time_notify()
     while True:
         now_time = datetime.now().time()
@@ -31,10 +30,7 @@ async def sending_messages():
         if GlobalVars.SEND_TIME and GlobalVars.SEND_TIME == now_time:
             # рассылка уведомлений всем пользователям
             for user in User.filter(time=GlobalVars.SEND_TIME):
-                await bot.send_message(
-                    chat_id=user.tg_user,
-                    text='Ваше уведомление',
-                )
+                await bot.send_message(user.tg_user, random.choice(list_of_jokes))
 
             GlobalVars.SEND_TIME = await get_time_notify()
 
@@ -47,20 +43,6 @@ async def sending_messages():
 async def on_startup():
     """Обертка что бы запустить параллельный процесс"""
     asyncio.create_task(sending_messages())
-
-async def send_joke(user_id, sheduled_time):
-    ''' Функция для проверки текущего времени'''
-    while True:
-        now = datetime.now()
-        if now >= sheduled_time:
-            if list_of_jokes:
-                random_joke = random.choice(list_of_jokes)
-                list_of_jokes.remove(random_joke)
-                await bot.send_message(user_id, random_joke)
-            else:
-                await bot.send_message(user_id, "К сожалению, у меня закончились шутки.")
-            break
-        await asyncio.sleep(10)
 
 async def main():
     '''Старт бота'''

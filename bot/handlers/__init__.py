@@ -2,7 +2,6 @@
 from aiogram import Dispatcher
 from . import start, set_time
 
-
 def include_routers(dp: Dispatcher):
     """Добавление всех роутеров в диспетчер"""
     dp.include_routers(

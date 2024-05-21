@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 tok.py
-
+stare.py
 # C extensions
 *.so
 
