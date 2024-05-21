@@ -18,7 +18,7 @@ TIME_PATTERN = r'^([0-9]|1[0-9]|2[0-3]):([0-5]\d)$'
 async def set_time_handler(message: Message, state: FSMContext):
     """Обработка команды set_time"""
     await state.set_state(SetTime.time)
-    await message.answer("Выберите время в формате чч:мм для рассылки картинок")
+    await message.answer("Выберите время в формате чч:мм для рассылки мемом")
 
 
 @router.message(F.text, SetTime.time)
@@ -42,4 +42,4 @@ async def set_time_by_notification_handler(message: Message, state: FSMContext):
 @router.message(SetTime.time)
 async def set_other_by_notification_handler(message: Message):
     """Срабатывает когда пользователь отправляет не текст со временем"""
-    await message.answer("Выберите время в формате чч:мм для рассылки картинок")
+    await message.answer("Выберите время в формате чч:мм для рассылки мемов")
