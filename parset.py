@@ -3,18 +3,19 @@ import requests
 from bs4 import BeautifulSoup
 
 
-URL = 'https://anekdoty.ru/'
+URL = 'https://topmemas.top/'
 
 
 def parser(url):
     ''' метод получения адреса'''
-    response = requests.get(url, timeout=5)
+    response = requests.get(url, timeout=60)
     bs = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
-    table = bs.find_all('div', attrs={'class': 'holder-body'})
+    table = bs.find_all('div', attrs={'class': 'cont_item'})
     jokes = []
     for i in table:
-        dela = i.find_all('p')
-        jokes.extend([c.text for c in dela])
-    return jokes
-
+        dela = i.find('source').get('srcset')
+        mem = 'https://topmemas.top/' + dela
+        jokes.append(mem)
+        return jokes
 list_of_jokes = parser(URL)
+print(list_of_jokes)
