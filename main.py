@@ -30,7 +30,8 @@ async def sending_messages():
         if GlobalVars.SEND_TIME and GlobalVars.SEND_TIME == now_time:
             # рассылка уведомлений всем пользователям
             for user in User.filter(time=GlobalVars.SEND_TIME):
-                await bot.send_message(user.tg_user, random.choice(list_of_jokes))
+                await bot.send_photo(user.tg_user, random.choice(list_of_jokes))
+
 
             GlobalVars.SEND_TIME = await get_time_notify()
 
