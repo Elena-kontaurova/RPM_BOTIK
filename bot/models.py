@@ -1,7 +1,7 @@
 """Модели для БД"""
 from peewee import SqliteDatabase, Model, ForeignKeyField, \
                         TimeField, IntegerField,\
-                          CharField
+                          CharField,BlobField
 db = SqliteDatabase('sqlite.db')
 
 class Table(Model):
@@ -18,6 +18,7 @@ class User(Table):
 class Image(Table):
     '''  таблица картинок'''
     url = CharField()
+    id = CharField(primary_key=True)
 
 class Tag(Table):
     ''' таблица тэгов'''
@@ -35,27 +36,24 @@ class ImageTag(Table):
     )
 
 class ImageUser(Table):
-    ''' таблица картинка и пользователь'''
-    tg_user = IntegerField()
-    image = ForeignKeyField(Image)
+    """
+    Модель для хранения изображений пользователей.
+    """
+    id = CharField(primary_key=True)
+    image = BlobField()
 
-class ImageManager:
-    # """Класс для управления отправкой картинок пользователям"""
 
-    # @staticmethod
-    # def has_sent_image(user_id, image_id):
-    #     """Проверяет, была ли отправлена данная картинка данному пользователю"""
-    #     try:
-    #         ImageUser.get(ImageUser.tg_user == user_id, ImageUser.image == image_id)
-    #         return True
+class UserImageTag(Table):
+    """
+    Модель для хранения связи между пользователем, изображением и тегом.
+    """
+    telegram_user_id = IntegerField()
+    image = ForeignKeyField(ImageUser, backref='user_image_tags')
+    tag = CharField()
 
-    # @staticmethod
-    # def send_image(user_id, image_id):
-    #     """Отправляет картинку пользователю и сохраняет информацию об этом"""
-    #     ImageUser.create(tg_user=user_id, image=image_id)
 
 
 
 db.connect()
-db.create_tables([User, Image, Tag, ImageTag, ImageUser],  safe=True)
+db.create_tables([User, Image, Tag, ImageTag, ImageUser, UserImageTag],  safe=True)
 db.close()

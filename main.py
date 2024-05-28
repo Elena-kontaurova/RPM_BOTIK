@@ -1,10 +1,11 @@
 """Телеграм бот с примеров установки времени рассылки 
 и алгоритмом рассылки сообщений без лишний зхапросов к БД"""
+# import random
 import asyncio
 from datetime import time, timedelta, datetime
 from aiogram import Bot, Dispatcher
 from bot.handlers import include_routers
-from bot.models import User
+from bot.models import User, Image
 from bot.singleton import GlobalVars
 from tok import TOKEN
 from parse import parse_image
@@ -19,7 +20,8 @@ async def get_time_notify():
     if users.count() > 0:
         return (users.first()).time
 
-async def sending_messages():
+
+async def sending_messages(limit=1, offset=0):
     """Рассылка сообщений"""
     GlobalVars.SEND_TIME = await get_time_notify()
     while True:
@@ -28,8 +30,9 @@ async def sending_messages():
         if GlobalVars.SEND_TIME and GlobalVars.SEND_TIME == now_time:
             # рассылка уведомлений всем пользователям
             for user in User.filter(time=GlobalVars.SEND_TIME):
-                pass
-
+                image = await Image.select(Image.id, Image.url).order_by(Image.id). \
+                limit(limit).offset(offset).execute
+                bot.send_photo(user.tg_user, image)
 
             GlobalVars.SEND_TIME = await get_time_notify()
 
