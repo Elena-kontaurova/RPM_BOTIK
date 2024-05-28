@@ -31,7 +31,7 @@ async def set_time_by_notification_handler(message: Message, state: FSMContext):
     hour = int(match.group(1))
     minute = int(match.group(2))
     new_time = time(hour=hour, minute=minute)
-    user = User.get(tg_user=message.from_user.id)
+    user = User.get_or_create(tg_user=message.from_user.id)[0]
     user.time = new_time
     user.save()
     GlobalVars.SEND_TIME = new_time
